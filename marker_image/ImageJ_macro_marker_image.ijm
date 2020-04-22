@@ -16,7 +16,7 @@ waitForUser("Please set the threshold manually. Then press OK.");
 setOption("BlackBackground", false);
 run("Convert to Mask");
 run("Close");
-//Create binary image from grayscale image: choose and apply cut-off value to divide image into foreground, i.e. vial areas, and background, i.e., grid. This works well when the grid is darker than the biomas. Otherwise you will have to setOption (ìBlack backgroundî, true).
+//Create binary image from grayscale image: choose and apply cut-off value to divide image into foreground, i.e. vial areas, and background, i.e., grid. This works well when the grid is darker than the biomas. Otherwise you will have to setOption (‚ÄúBlack background‚Äù, true).
 run("Fill Holes (Binary/Gray)");
 //Fill holes in the areas occupied by vials to achieve a solid area (Legland et al., 2016).
 run("Morphological Filters", "operation=Opening element=Disk radius=10");
