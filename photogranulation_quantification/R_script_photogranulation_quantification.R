@@ -20,7 +20,7 @@ margin.vial <- 212
 #Manually enter average number of pixels between the centre and edges of a particle as measured in ImageJ, typically the inner radius of the vials in pixel.
 
 ##Files to be imported --------------------------------------
-#A demo can be run with the files available at https://github.com/esmeejoosten/photogranulation-quantification.
+#A demo can be run with the files available at https://doi.org/10.5281/zenodo.3922175.
 coordinates.name <- "results_marker.csv" #Information about each particle on marker image (generated using ImageJ)
 raw.data.name <- "results_scanner_images.csv" #Joined result tables of scanner images (generated using ImageJ)
 acquisition.time.name <- "image_acquisition.txt" #Image name, creation date and time of scanner images (generated using ExifTool)
@@ -77,7 +77,7 @@ average.x.10 <- mean(coordinates$X[coordinates$X.1 %in% column.10])
 average.x.11 <- mean(coordinates$X[coordinates$X.1 %in% column.11])
 average.x.12 <- mean(coordinates$X[coordinates$X.1 %in% column.12])
 average.x.13 <- mean(coordinates$X[coordinates$X.1 %in% column.13])
-#Calculate average X coordinates.
+#Calculates average X coordinates.
 
 average.y.1 <- mean(coordinates$Y[coordinates$X.1 %in% row.1])
 average.y.2 <- mean(coordinates$Y[coordinates$X.1 %in% row.2])
@@ -90,25 +90,25 @@ average.y.8 <- mean(coordinates$Y[coordinates$X.1 %in% row.8])
 average.y.9 <- mean(coordinates$Y[coordinates$X.1 %in% row.9])
 average.y.10 <- mean(coordinates$Y[coordinates$X.1 %in% row.10])
 average.y.11 <- mean(coordinates$Y[coordinates$X.1 %in% row.11])
-#Calculate average Y coordinates.
+#Calculates average Y coordinates.
 
 average.x.a <-c(average.x.1,average.x.3,average.x.5,average.x.7,average.x.9,average.x.11,average.x.13)
 average.x.b <- c(average.x.2,average.x.4,average.x.6,average.x.8,average.x.10,average.x.12)
-#Calculate average Y coordinates of rows having same X coordinate.
+#Calculates average Y coordinates of rows having same X coordinate.
 average.y.a <- c(average.y.1,average.y.3,average.y.5,average.y.7,average.y.9,average.y.11)
 average.y.b <- c(average.y.2,average.y.4,average.y.6,average.y.8,average.y.10)
-#Calculate average X coordinates of rows having same Y coordinate.
+#Calculates average X coordinates of rows having same Y coordinate.
 first.half <- expand.grid(average.x.a, average.y.a) 
 second.half <- expand.grid(average.x.b, average.y.b) 
-#Couple X and Y coordinates for both a and b.
+#Couples X and Y coordinates for both a and b.
 average.coordinates <- rbind(first.half, second.half) 
 colnames(average.coordinates) <- c("X","Y")
-#Combine first.half and second.half by rows.
+#Combines first.half and second.half by rows.
 average.coordinates <- average.coordinates[order(average.coordinates$Y, average.coordinates$X),] 
-#Arrange coordinates to be in the same order as particle numbers that can be found on marker screenshot.
+#Arranges coordinates to be in the same order as particle numbers that can be found on marker screenshot.
 average.coordinates <- cbind(average.coordinates, pos.names, 1:72) 
 colnames(average.coordinates) <- c("X","Y", "ParticleLabel", "Location") 
-#Add columns with order of particles numbers that can be found on marker screenshot and experimental vial locations (1 to 72 from top left to bottom right).
+#Adds columns with order of particles numbers that can be found on marker screenshot and experimental vial locations (1 to 72 from top left to bottom right).
 
 ###Assign experimental time to all experimentally measured particles per image by adding a column with experimental time to the particle data obtained with ImageJ. This facilitates the plotting to temporal dynamics.
 
@@ -116,7 +116,7 @@ colnames(average.coordinates) <- c("X","Y", "ParticleLabel", "Location")
 start.time <- strptime(start.time, "%Y:%m:%d %H:%M:%S") 
 #Converts start time to calendar and time representation.
 date.time <- strptime(acquisition.time[,2], "%Y:%m:%d %H:%M:%S") 
-#Acquires acquisition time per image and converts it calendar and time representation.
+#Acquires acquisition time per image and converts it to calendar and time representation.
 exp.time <- round(-1*(as.numeric(start.time - date.time, units="hours")),3)
 #Converts date time to experimental time.
 acquisition.time <- cbind(acquisition.time, exp.time) 
@@ -135,7 +135,7 @@ ExpTime.vec[indices.1] <- time.i}
 raw.data <- cbind(raw.data, ExpTime.vec, rep(NA, nrow(raw.data)), rep(NA, nrow(raw.data)), rep(NA, nrow(raw.data)))
 colnames(raw.data)[(ncol(raw.data)-3):ncol(raw.data)] <- c("ExpTime", "Location", "ExpCondition", "ExpID")
 raw.data <- raw.data[order(raw.data$ExpTime),] 
-#Loops over number of scanner images (i.e., 110 images), give experimental time of image in acquisition.time file that corresponds to image i. Give rows that correspond to image raw.data file that corresponds to image i (each image typically has 72 particles). Replace zeros in vector belonging to these rows by experimental time belonging to image i.
+#Loops over number of scanner images (i.e., 110 images), gives experimental time of image in acquisition.time file that corresponds to image i. Gives rows that correspond to image raw.data file that corresponds to image i (each image typically has 72 particles). Replaces zeros in vector belonging to these rows by experimental time belonging to image i.
 
 ###Identify particles from a vial at a specific physical location on each image using the X-, Y-coordinates of vial areas. Relate particles to their location by assigning a location number and match them to the appropriate experimental conditions.
 
@@ -152,7 +152,7 @@ raw.data$Location[indices.2] <- experimental.condition$Location[indices.1]
 raw.data$ExpCondition[indices.2] <- experimental.condition$ExpCondition[indices.1]
 raw.data$ExpID[indices.2] <- experimental.condition$ExpID[indices.1]}
 if (length(which(raw.data$Location == 0)) == 0) {print("No 0s left and all coordinates are assinged a location")} else {"Watch out! There are unidentified particles left in the data."}
-#Loop over number of rows in average.coordinates file (i.e., 72 rows for 72 particles). Return the particle that falls within the X, Y coordinates for a specific position, i.e., 110 particles for each location because there are 110 images. Note: small and not-centred particles may not be detected. Relate the location number (i.e., 1 to 72) to the X, Y position so that the particle has the same label on every image. Couple experimental conditions to locations. 
+#Loops over number of rows in average.coordinates file (i.e., 72 rows for 72 particles). Returns the particle that falls within the X, Y coordinates for a specific position, i.e., 110 particles for each location because there are 110 images. Note: small and not-centred particles may not be detected. Relates the location number (i.e., 1 to 72) to the X, Y position so that the particle has the same label on every image. Couples experimental conditions to locations. 
 
 ###Transform the detected surface area of particles into equivalent diameters;
 
