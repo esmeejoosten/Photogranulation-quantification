@@ -137,10 +137,8 @@ raw.data <- raw.data[order(raw.data$ExpTime),]
 
 #Identify particles per location, add experimental conditions ------------------------------
 for(j in 1:nrow(mean.coordinates) ){indices.2 <- which(
-    raw.data$X > mean.coordinates$X[j]-margin.vial & 
-    raw.data$X < mean.coordinates$X[j]+margin.vial &
-    raw.data$Y > mean.coordinates$Y[j]-margin.vial &
-    raw.data$Y < mean.coordinates$Y[j]+margin.vial) 
+    sqrt(((raw.data$X- average.coordinates$X[j])^2) + 
+    ((raw.data$Y-average.coordinates$Y[j])^2)) < margin.vial)
 if(length(indices.2) == length(unique.images)){print(paste(c("All looks fine for Location ", j, "."), sep = "", collapse = ""))}else{print(paste(c("Warning: there's an issue for Location ", j, "."), sep = "", collapse = ""))}
 
 raw.data$Location[indices.2] <- mean.coordinates$Location[j] 
